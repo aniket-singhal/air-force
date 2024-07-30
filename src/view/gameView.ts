@@ -1,16 +1,22 @@
 // src/view/gameView.ts
 import * as PIXI from 'pixi.js';
 import { gameConfig } from '../gameConfig';
+import { AssetLoader } from '../Loader';
 export class GameView {
+  resize() {
+    throw new Error('Method not implemented.');
+  }
   public app: PIXI.Application;
   private desiredAspectRatio: number;
+  private assetLoader: AssetLoader;
 
-  constructor(desiredAspectRatio: number) {
+  constructor(desiredAspectRatio: number,assetLoader: AssetLoader) {
+    this.assetLoader = assetLoader;
     this.desiredAspectRatio = gameConfig.desiredAspectRatio;;
     this.app = new PIXI.Application({
       width: gameConfig.gameWidth,
       height: gameConfig.gameHeight,
-      // backgroundColor: gameConfig.backgroundColor,
+      backgroundColor: gameConfig.backgroundColor,
     });
     document.body.appendChild(this.app.view as any);
 
@@ -22,7 +28,6 @@ export class GameView {
 
     window.addEventListener('resize', this.onResize.bind(this));
     this.onResize(); // Call initially to set the correct size
-    this.loadManifest();
   }
 
   private onResize(): void {
@@ -44,26 +49,19 @@ export class GameView {
       canvasStyle.height = `${newHeight}px`;
     }
   }
-  private loadManifest(): void {
-    fetch('assets/manifest.json')
-      .then(response => response.json())
-      .then((manifest) => {
-        // Use PIXI.Assets to load assets
-        const assetPaths: { [key: string]: string } = {};
-        manifest.images.forEach((image: { name: string, url: string }) => {
-          assetPaths[image.name] = `assets/${image.url}`;
-        });
-
-        PIXI.Assets.load(Object.values(assetPaths)).then((assets) => {
-          manifest.images.forEach((image: { name: string, url: string }) => {
-            const sprite = new PIXI.Sprite(assets[image.name]);
-            sprite.x = Math.random() * this.app.renderer.width;
-            sprite.y = Math.random() * this.app.renderer.height;
-            sprite.anchor.set(0.5);
-            this.app.stage.addChild(sprite);
-          });
-        }).catch(error => console.error('Error loading assets:', error));
-      })
-      .catch(error => console.error('Error loading manifest:', error));
+  public showImage(name: string, x: number, y: number): void {
+    const resource = this.assetLoader.getResource(name);
+    if (resource) {
+      const sprite = new PIXI.Sprite(resource.texture);
+      sprite.x = x;
+      sprite.y = y;
+      sprite.anchor.set(0.5);
+      this.app.stage.addChild(sprite);
+    } else {
+      console.warn(`Resource ${name} not found.`);
+    }
+  }
+  public clearStage(): void {
+    this.app.stage.removeChildren();
   }
 }
