@@ -1,6 +1,15 @@
 {
-    "images": [
-      { "name": "plane", "url": "assets/images/air-force-plane.png" }
-    ]
-  }
-  
+  "images": [
+    {
+      "name": "plane",
+      "url": "assets/images/air-force-plane.png",
+      "position": { "x": 200, "y": 300 },
+      "scale": { "x": 1, "y": 1 },
+      "visible": true,
+      "width": 100,
+      "height": 100,
+      "anchor": { "x": 0.5, "y": 0.5 },
+      "pivot": { "x": 0.5, "y": 0.5 }
+    }
+  ]
+}

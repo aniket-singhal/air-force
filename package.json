@@ -3,7 +3,8 @@
     "@pixi/loaders": "^6.5.10",
     "@webpack-cli/generators": "^3.0.7",
     "gsap": "^3.12.5",
-    "pixi.js": "^7.4.2"
+    "pixi.js": "^7.4.2",
+    "rimraf": "^6.0.1"
   },
   "version": "1.0.0",
   "description": "none",
@@ -13,7 +14,8 @@
     "debug": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
-    "serve": "webpack serve"
+    "serve": "webpack serve",
+    "clean": "rimraf dist"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",

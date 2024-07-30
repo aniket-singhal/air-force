@@ -56,8 +56,10 @@ const config = {
         static: {
           directory: path.join(__dirname, 'dist'),
         },
-        compress: true,
+        compress: false,
         port: 9001,
+        hot: true,
+        open: true
       },
 };
 

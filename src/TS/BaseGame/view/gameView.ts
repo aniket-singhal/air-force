@@ -1,16 +1,15 @@
 // src/view/gameView.ts
 import * as PIXI from 'pixi.js';
-import { gameConfig } from '../gameConfig';
+import { gameConfig } from '../../../gameConfig';
 import { AssetLoader } from '../Loader';
+
+
 export class GameView {
-  resize() {
-    throw new Error('Method not implemented.');
-  }
   public app: PIXI.Application;
   private desiredAspectRatio: number;
   private assetLoader: AssetLoader;
 
-  constructor(desiredAspectRatio: number,assetLoader: AssetLoader) {
+  constructor(assetLoader: AssetLoader) {
     this.assetLoader = assetLoader;
     this.desiredAspectRatio = gameConfig.desiredAspectRatio;;
     this.app = new PIXI.Application({
@@ -30,7 +29,7 @@ export class GameView {
     this.onResize(); // Call initially to set the correct size
   }
 
-  private onResize(): void {
+  public onResize(): void {
     const screenWidth = gameConfig.gameWidth;
     const screenHeight = gameConfig.gameHeight;
     const screenRatio = screenWidth / screenHeight;
@@ -49,17 +48,39 @@ export class GameView {
       canvasStyle.height = `${newHeight}px`;
     }
   }
-  public showImage(name: string, x: number, y: number): void {
+  public showImage(name: string): void {
     const resource = this.assetLoader.getResource(name);
-    if (resource) {
+    const asset = this.assetLoader.getAsset(name);
+    if (resource && asset) {
       const sprite = new PIXI.Sprite(resource.texture);
-      sprite.x = x;
-      sprite.y = y;
-      sprite.anchor.set(0.5);
-      this.app.stage.addChild(sprite);
-    } else {
-      console.warn(`Resource ${name} not found.`);
+    // Apply asset properties to the sprite
+    if (asset.position) {
+      sprite.x = asset.position.x;
+      sprite.y = asset.position.y;
     }
+    if (asset.scale) {
+      sprite.scale.set(asset.scale.x, asset.scale.y);
+    }
+    if (asset.visible !== undefined) {
+      sprite.visible = asset.visible;
+    }
+    if (asset.width) {
+      sprite.width = asset.width;
+    }
+    if (asset.height) {
+      sprite.height = asset.height;
+    }
+    if (asset.anchor) {
+      sprite.anchor.set(asset.anchor.x, asset.anchor.y);
+    }
+    if (asset.pivot) {
+      sprite.pivot.set(asset.pivot.x, asset.pivot.y);
+    }
+
+    this.app.stage.addChild(sprite);
+  } else {
+    console.warn(`Resource ${name} not found.`);
+  }
   }
   public clearStage(): void {
     this.app.stage.removeChildren();
