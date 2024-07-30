@@ -23,7 +23,7 @@ export class Main {
     this.assetLoader.loadAssets(manifestUrl)
       .then(() => {
         console.log('Assets loaded');
-        this.view.showImage('plane');
+        this.view.onAssetsLoaded();
 
         // Handle window resize
         window.addEventListener('resize', () => {
@@ -38,22 +38,22 @@ export class Main {
     (globalThis as any).__PIXI_APP__ = this.view.app;
 
     // Register service worker if needed
-    // this.registerServiceWorker();
+    this.registerServiceWorker();
   }
   
 
   // Optional: Service Worker Registration
-  // private registerServiceWorker(): void {
-  //   if ('serviceWorker' in navigator) {
-  //     window.addEventListener('load', () => {
-  //       navigator.serviceWorker.register('/service-worker.js')
-  //         .then(registration => {
-  //           console.log('ServiceWorker registration successful with scope: ', registration.scope);
-  //         })
-  //         .catch(error => {
-  //           console.error('ServiceWorker registration failed: ', error);
-  //         });
-  //     });
-  //   }
-  // }
+  private registerServiceWorker(): void {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          })
+          .catch(error => {
+            console.error('ServiceWorker registration failed: ', error);
+          });
+      });
+    }
+  }
 }

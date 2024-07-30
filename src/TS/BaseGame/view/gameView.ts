@@ -8,6 +8,7 @@ export class GameView {
   public app: PIXI.Application;
   private desiredAspectRatio: number;
   private assetLoader: AssetLoader;
+  public onAssetsLoaded:any;
 
   constructor(assetLoader: AssetLoader) {
     this.assetLoader = assetLoader;
@@ -48,7 +49,7 @@ export class GameView {
       canvasStyle.height = `${newHeight}px`;
     }
   }
-  public showImage(name: string): void {
+  public showImage(name: string): PIXI.Sprite | undefined {
     const resource = this.assetLoader.getResource(name);
     const asset = this.assetLoader.getAsset(name);
     if (resource && asset) {
@@ -78,6 +79,7 @@ export class GameView {
     }
 
     this.app.stage.addChild(sprite);
+    return sprite;
   } else {
     console.warn(`Resource ${name} not found.`);
   }
