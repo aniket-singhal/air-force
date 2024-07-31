@@ -77,6 +77,9 @@ export class GameView {
     if (asset.pivot) {
       sprite.pivot.set(asset.pivot.x, asset.pivot.y);
     }
+    if (asset.angle) {
+      sprite.angle=asset.angle;
+    }
 
     this.app.stage.addChild(sprite);
     return sprite;

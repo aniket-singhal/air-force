@@ -1,4 +1,5 @@
 export interface Asset {
+    angle: number;
     name: string;
     url: string;
     position?: { x: number, y: number };

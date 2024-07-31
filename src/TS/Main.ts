@@ -1,4 +1,5 @@
 
+import { initDevtools } from '@pixi/devtools';
 import { GameController } from './BaseGame/controller/gameController';
 import { AssetLoader } from './BaseGame/Loader';
 import { GameModel } from './BaseGame/model/gameModel';
@@ -32,6 +33,9 @@ export class Main {
       })
       .catch(err => {
         console.error('Error loading assets:', err);
+      });
+      initDevtools({
+        app: this.view.app
       });
 
     // Expose PIXI app globally for debugging
